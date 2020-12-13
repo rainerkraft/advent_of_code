@@ -3,18 +3,27 @@
 with open('input.csv') as fp:
     rows = [line.rstrip() for line in fp]
 
-length = len(rows[0])
+rowLength = len(rows[0])
 
-rowCounter = 0
-treeCounter = 0
-rowIndex = 1
-rightStep = 1
-downStep = 2
-for row in rows[::downStep]:
-    rowCounter += downStep
-    if rowCounter <= downStep: continue
-    treeCounter += 1 if row[rowIndex] == '#' else 0
-    nextIndex = rowIndex+rightStep
-    rowIndex = nextIndex if nextIndex < length else nextIndex - length
+def countTrees(rightStep, downStep):
+    rowCounter = 0
+    treeCounter = 0
+    rowIndex = rightStep
+    for row in rows:
+        rowCounter += 1
+        if (rowCounter <= downStep) or (downStep > 1 and (rowCounter % downStep-1) != 0): continue
+        if row[rowIndex] == '#': treeCounter += 1
+        nextIndex = rowIndex+rightStep
+        rowIndex = nextIndex if nextIndex < rowLength else nextIndex - rowLength
 
-print('Number of trees (Right %d, down %d):' % (rightStep, downStep), treeCounter)
+    return treeCounter
+
+routes = [[1,1], [3,1], [5,1], [7,1], [1,2]]
+
+totalTrees = 0
+for route in routes:
+    trees = countTrees(route[0], route[1])
+    totalTrees = trees if totalTrees == 0 else totalTrees * trees
+    print('Number of trees (Right %d, down %d):' % (route[0], route[1]), trees)
+
+print('Total trees: %d' % totalTrees)
