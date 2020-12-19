@@ -18,3 +18,26 @@ def findBags(searchTerm):
 
 findBags('shiny gold')
 print('Bags containing shiny gold bags: %d' % len(list(set(listOfBags))))
+
+numBags = 0
+def countBags(start, prevCount):
+    global numBags
+    global counter
+    for row in rows:
+        match = pattern.match(row)
+        if None != re.search(start, match.group(1)):
+            allContainedBags = match.group(2)
+            bags = allContainedBags.split(',')
+            for bag in bags:
+                bag = bag.strip()
+                numSearch = re.search('\d+', bag)
+                number = 0 if None == numSearch else int(numSearch[0])
+                if number > 0:
+                    nextStart = bag.replace(' bags', '')
+                    nextStart = re.sub('\d+', '', nextStart).strip()
+                    toAdd = (int(prevCount) * number)
+                    numBags += toAdd
+                    countBags(nextStart, toAdd)
+
+countBags('shiny gold', 1)
+print('Bags contained in shiny gold bag: %d' % numBags)
