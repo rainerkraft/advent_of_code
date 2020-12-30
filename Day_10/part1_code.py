@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import itertools
-
 with open('input.txt', 'r') as fp:
     lines = [int(line.rstrip()) for line in fp]
 
